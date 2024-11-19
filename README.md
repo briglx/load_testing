@@ -58,6 +58,7 @@ sudo chown -R $USER:$USER "${JMETER_DIR}"
 # Cleanup
 rm "apache-jmeter-${JMETER_VERSION}.tgz"
 ```
+
 ## Run the Application
 
 ```bash
@@ -74,6 +75,12 @@ curl -p 127.0.0.1:5001/health
 
 # Check test endpoint
 curl -p 127.0.0.1:5001/test
+```
+
+## Load testing
+```bash
+# Run JMeter tests
+./script/jmeter.sh run -t load_tests/test_plan.jmx
 ```
 
 ## Run JMeter UI
@@ -130,13 +137,9 @@ pre-commit run --all-files codespell
 # Run linters outside of pre-commit
 codespell .
 shellcheck -x ./script/*.sh
-
-# Run JMeter tests
-# Run JMeter
-./script/jmeter.sh run -t load_tests/test_plan.jmx
-# "${JMETER_DIR}/bin/jmeter" -n -t load_tests/test_plan.jmx -l load_tests/results.jtl
-
 ```
+
+
 
 # References
 - [Jmeter](https://jmeter.apache.org/)
