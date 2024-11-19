@@ -1,7 +1,8 @@
 # JMeter
 
-Example project of using Jmeter
+Example project using Jmeter
 
+![Architecture Overview](./docs/architecture_overview.png)
 
 # Development
 
@@ -44,18 +45,14 @@ sudo apt-get update
 sudo apt-get install -y shellcheck
 pre-commit install
 
-# Install JMeter ---------------------
-JMETER_VERSION=5.6.3
-JMETER_URL="https://dlcdn.apache.org//jmeter/binaries/apache-jmeter-${JMETER_VERSION}.tgz"
-JMETER_DIR="/opt/apache-jmeter-${JMETER_VERSION}"
-
 # Install Java
 sudo apt update && sudo apt install -y openjdk-11-jre
 
-# Download JMeter
+# Install JMeter ---------------------
+JMETER_URL="https://dlcdn.apache.org/jmeter/binaries/apache-jmeter-${JMETER_VERSION}.tgz"
 wget -q "${JMETER_URL}" -O "apache-jmeter-${JMETER_VERSION}.tgz"
 sudo mkdir -p /opt
-sudo tar -xzf "apache-jmeter-${JMETER_VERSION}.tgz" -C /opt
+sudo tar -xzf "apache-jmeter.tgz" -C /opt
 sudo chown -R $USER:$USER "${JMETER_DIR}"
 
 # Cleanup
@@ -72,12 +69,20 @@ rm "apache-jmeter-${JMETER_VERSION}.tgz"
 # Run the application
 ./script/startup.sh
 
-# Test endpoint
-curl -X POST -v http://localhost:5001/health
+# Check health endpoint
+curl -p 127.0.0.1:5001/health
 
-# Run JMeter
-"${JMETER_DIR}/bin/jmeter" -n -t load_tests/test_plan.jmx -l load_tests/results.jtl
+# Check test endpoint
+curl -p 127.0.0.1:5001/test
 ```
+
+## Run JMeter UI
+
+```bash
+# Start Gui
+./script/jmeter.sh edit -t load_tests/test_plan.jmx
+```
+
 ## Style Guidelines
 
 This project enforces quite strict [PEP8](https://www.python.org/dev/peps/pep-0008/) and [PEP257 (Docstring Conventions)](https://www.python.org/dev/peps/pep-0257/) compliance on all code submitted.
@@ -109,7 +114,7 @@ One exception is for logging which uses the percentage formatting. This is to av
 _LOGGER.info("Can't connect to the webservice %s at %s", string1, string2)
 ```
 
-### Testing
+## Testing
 
 Ideally, all code is checked to verify the following:
 
@@ -125,10 +130,15 @@ pre-commit run --all-files codespell
 # Run linters outside of pre-commit
 codespell .
 shellcheck -x ./script/*.sh
+
+# Run JMeter tests
+# Run JMeter
+./script/jmeter.sh run -t load_tests/test_plan.jmx
+# "${JMETER_DIR}/bin/jmeter" -n -t load_tests/test_plan.jmx -l load_tests/results.jtl
+
 ```
-## Configure Point to Site VPN
-
-
 
 # References
 - [Jmeter](https://jmeter.apache.org/)
+- Jmeter Variables https://medium.com/@alex_rodriguez_soto/jmeter-using-variables-60c4b0d52bb0
+- Jmeter best practices https://jmeter.apache.org/usermanual/best-practices.html

@@ -7,12 +7,8 @@ repos:
       rev: v2.2.6
       hooks:
         - id: codespell
-          args:
-            - '--skip="./.*,*.csv,*.json,*.pyc,./docs/_build/*,./htmlcov/*"'
-            - '--quiet-level=2'
-          exclude_types:
-            - csv
-            - json
+          additional_dependencies:
+          - tomli
     - repo: 'https://github.com/psf/black'
       rev: 24.3.0
       hooks:
@@ -27,7 +23,7 @@ repos:
           additional_dependencies:
             - flake8-docstrings==1.6.0
             - pydocstyle==6.3.0
-          files: ^main.py|(boilerplate|tests)\/.+\.py$
+          files: ^(api|tests)\/.+\.py$
     - repo: 'https://github.com/PyCQA/bandit'
       rev: 1.7.8
       hooks:
@@ -68,4 +64,4 @@ repos:
           entry: script/run_in_env.sh pylint -j 0
           language: script
           types: [python]
-          files: ^functions/.+\.py$
+          files: ^api/.+\.py$

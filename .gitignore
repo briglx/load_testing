@@ -52,8 +52,9 @@ coverage.xml
 .azure
 
 # Jmeter
-apache-jmeter-*.tgz
+apache-jmeter*.tgz
 jmeter.log
+
 
 # App
 .env
@@ -61,3 +62,5 @@ uploads
 
 # Jmeter test results
 load_tests/*.jtl
+load_tests/log/
+load_tests/report/

@@ -2,6 +2,8 @@
 
 import logging
 import os
+import random
+import time
 
 from flask import Flask, jsonify, request
 
@@ -31,6 +33,15 @@ def health():
     return jsonify({"status": "ok", "release_version": RELEASE_VERSION})
 
 
+# Test route for load testing. Random response time between 0 and 2 seconds.
+@app.route("/test", methods=["GET"])
+def test():
+    """Test route for load testing."""
+    delay = random.randint(0, 3)
+    time.sleep(delay)
+    return jsonify({"status": "ok", "release_version": RELEASE_VERSION, "delay": delay})
+
+
 # API route to upload a file with associated metadata
 @app.route("/upload", methods=["POST"])
 def upload_file():
@@ -50,7 +61,7 @@ def upload_file():
         try:
             file_path = os.path.join(app.config["UPLOAD_FOLDER"], file.filename)
             file.save(file_path)
-            logger.info(f"File {file.filename} uploaded successfully")
+            logger.info("File %s uploaded successfully", file.filename)
 
             # Retrieve metadata from form
             metadata = request.form.to_dict()
@@ -63,9 +74,11 @@ def upload_file():
             }
             logger.info(response)
             return jsonify(response), 200
-        except Exception as e:
-            logger.error(f"Error uploading file: {str(e)}")
+        except Exception as e:  # pylint: disable=W0718
+            logger.error("Error uploading file: %s", e)
             return jsonify({"error": str(e)}), 500
+
+    return jsonify({"error": "Unknown error"}), 500
 
 
 # # Run the Flask app
