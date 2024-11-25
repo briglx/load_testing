@@ -139,7 +139,9 @@ codespell .
 shellcheck -x ./script/*.sh
 ```
 
+## Tips
 
+* Debug bicep templates with `az bicep build --file <your_bicep_file>.bicep`
 
 # References
 - [Jmeter](https://jmeter.apache.org/)
